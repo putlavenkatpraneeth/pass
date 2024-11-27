@@ -70,7 +70,20 @@
         <button class="btn" onclick="verifyOTP()">Verify OTP</button>
         <div class="error" id="otp-error"></div>
       </div>
-
+      <h3>Create a New Password</h3>
+      <input
+        type="password"
+        placeholder="Create Password"
+        id="p1"
+      />
+      <input
+        type="password"
+        placeholder="Re-enter Password"
+        id="p2"
+      />
+      <button class="btn" onclick="createPassword()">Submit</button>
+      <div class="error" id="password-error"></div>
+    </div>
     
 
     <script>
@@ -122,6 +135,37 @@
           otpError.textContent = "Invalid OTP, please try again.";
           otpError.style.color = "red";
         }
+      }
+      
+      // Function to create a password
+      function createPassword() {
+        let p1 = document.getElementById("p1").value;
+        let p2 = document.getElementById("p2").value;
+        let passwordError = document.getElementById("password-error");
+
+        // Clear any previous error messages
+        passwordError.textContent = "";
+
+        // Validate if passwords match
+        if (p1 === "" || p2 === "") {
+          passwordError.textContent = "Both password fields are required.";
+          return;
+        }
+
+        if (p1 !== p2) {
+          passwordError.textContent = "Passwords do not match.";
+          return;
+        }
+        if (p1.length < 6&&p2.length<6) {
+            passwordError.textContent =
+              "Password must be at least 6 characters long.";
+            return;
+          }
+
+        // Display success message
+        console.log("Password created successfully!");
+        passwordError.textContent = "Password created successfully!";
+        passwordError.style.color = "green";
       }
 
     </script>
