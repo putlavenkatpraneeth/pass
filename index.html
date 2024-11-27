@@ -3,164 +3,127 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OTP Generation and Verification</title>
+    <title>Forgot Password</title>
     <style>
       body {
         font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background-image: url(./photo.avif);
+        padding: 20px;
       }
       .container {
-        text-align: center;
-        border: 2px solid #ccc;
+        max-width: 400px;
+        margin: 0 auto;
         padding: 20px;
-        border-radius: 10px;
-        width: 300px;
-      
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
       input {
+        width: 100%;
         padding: 10px;
         margin: 10px 0;
-        width: 80%;
-        font-size: 16px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
       }
-      .btn {
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border: none;
+      button {
+        width: 100%;
+        padding: 10px;
         background-color: #4caf50;
         color: white;
-        border-radius: 5px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
       }
-      .btn:hover {
+      button:hover {
         background-color: #45a049;
-      }
-      .error {
-        color: red;
-        font-size: 12px;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h3>Generate and Verify OTP</h3>
-
-      <!-- Mobile Number Input and Generate OTP Button -->
-      <input
-        type="text"
-        id="mobileNumber"
-        placeholder="Enter Mobile Number"
-        maxlength="10"
-      />
-      <button class="btn" onclick="generateOTP()">Generate OTP</button>
-      <div class="error" id="mobile-error"></div>
-
-      <!-- OTP Input and Verify Button -->
-      <div id="otp-section" style="display: none">
-        <input
-          type="text"
-          id="otpInput"
-          placeholder="Enter OTP"
-          maxlength="6"
-        />
-        <button class="btn" onclick="verifyOTP()">Verify OTP</button>
-        <div class="error" id="otp-error"></div>
+      <h2>Forgot Password</h2>
+      <div id="mobileSection">
+        <label for="mobile">Enter Mobile Number:</label>
+        <input type="text" id="mobile" placeholder="Enter your mobile number" />
+        <button onclick="generateOTP()">Generate OTP</button>
       </div>
-      <h3>Create a New Password</h3>
-      <input type="password" placeholder="Create Password" id="p1" />
-      <input type="password" placeholder="Re-enter Password" id="p2" />
-      <button class="btn" onclick="createPassword()">Submit</button>
-      <div class="error" id="password-error"></div>
+
+      <div id="otpSection" style="display: none">
+        <label for="otp">Enter OTP:</label>
+        <input type="text" id="otp" placeholder="Enter OTP" />
+        <button onclick="verifyOTP()">Verify OTP</button>
+      </div>
+
+      <div id="passwordSection" style="display: none">
+        <label for="password">Create New Password:</label>
+        <input type="password" id="password" placeholder="Enter new password" />
+        <label for="rePassword">Re-enter New Password:</label>
+        <input
+          type="password"
+          id="rePassword"
+          placeholder="Re-enter password"
+        />
+        <button onclick="createPassword()">Create Password</button>
+      </div>
     </div>
 
     <script>
-      let generatedOTP = ""; // Variable to store the generated OTP
+      let generatedOTP = "";
 
-      // Function to generate OTP
+      // Function to generate and display OTP
       function generateOTP() {
-        let mobileNumber = document.getElementById("mobileNumber").value;
-        let mobileError = document.getElementById("mobile-error");
+        const mobile = document.getElementById("mobile").value;
 
-        // Clear any previous error messages
-        mobileError.textContent = "";
-
-        // Validate mobile number
-        if (mobileNumber.length !== 10 || isNaN(mobileNumber)) {
-          mobileError.textContent =
-            "Please enter a valid 10-digit mobile number.";
+        if (!mobile || mobile.length !== 10 || isNaN(mobile)) {
+          alert("Please enter a valid 10-digit mobile number.");
           return;
         }
 
-        // Generate a 6-digit OTP
-        generatedOTP = "";
-        const characters = "0123456789";
-        for (let i = 0; i < 6; i++) {
-          generatedOTP += characters.charAt(
-            Math.floor(Math.random() * characters.length)
-          );
-        }
+        // Generate OTP (for simplicity, we generate a random 6-digit OTP)
+        generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // Display the OTP in the console (for demo purposes)
-        alert("Generated OTP: "+generatedOTP);
+        // Show the OTP (normally, you would send it via SMS or email)
+        alert("Your OTP is: " + generatedOTP);
 
-        // Show the OTP verification section and hide the mobile input
-        document.getElementById("otp-section").style.display = "block";
+        // Hide mobile section, show OTP section
+        document.getElementById("mobileSection").style.display = "none";
+        document.getElementById("otpSection").style.display = "block";
       }
 
-      // Function to verify OTP
+      // Function to verify the OTP entered by the user
       function verifyOTP() {
-        let enteredOTP = document.getElementById("otpInput").value;
-        let otpError = document.getElementById("otp-error");
+        const enteredOTP = document.getElementById("otp").value;
 
-        // Clear any previous error messages
-        otpError.textContent = "";
-
-        // Verify if the entered OTP matches the generated OTP
         if (enteredOTP === generatedOTP) {
-          console.log("OTP verification successful!");
-          otpError.textContent = "OTP verified successfully!";
-          otpError.style.color = "green";
+          // OTP is valid, show password creation section
+          alert("OTP Verified Successfully!");
+          document.getElementById("otpSection").style.display = "none";
+          document.getElementById("passwordSection").style.display = "block";
         } else {
-          console.log("Invalid OTP.");
-          otpError.textContent = "Invalid OTP, please try again.";
-          otpError.style.color = "red";
+          alert("Invalid OTP. Please try again.");
         }
       }
 
-      // Function to create a password
+      // Function to create new password
       function createPassword() {
-        let p1 = document.getElementById("p1").value;
-        let p2 = document.getElementById("p2").value;
-        let passwordError = document.getElementById("password-error");
+        const password = document.getElementById("password").value;
+        const rePassword = document.getElementById("rePassword").value;
 
-        // Clear any previous error messages
-        passwordError.textContent = "";
-
-        // Validate if passwords match
-        if (p1 === "" || p2 === "") {
-          passwordError.textContent = "Both password fields are required.";
+        if (password === "" || rePassword === "") {
+          alert("Please enter both password fields.");
           return;
         }
 
-        if (p1 !== p2) {
-          passwordError.textContent = "Passwords do not match.";
+        if (password !== rePassword) {
+          alert("Passwords do not match. Please try again.");
           return;
         }
-        if (p1.length < 6 && p2.length < 6) {
-          passwordError.textContent =
-            "Password must be at least 6 characters long.";
+        if (password.length < 6 && rePassword.length < 6) {
+          alert(  "Password must be at least 6 characters long.");
           return;
         }
 
-        // Display success message
-        console.log("Password created successfully!");
-        passwordError.textContent = "Password created successfully!";
-        passwordError.style.color = "green";
+        // Here, you would send the new password to the server for saving
+        alert("Password created successfully!");
       }
     </script>
   </body>
